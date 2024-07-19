@@ -74,4 +74,5 @@ Examples:
 
 ```python
 >>> morphology_string(['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle'])
+'v3sasm---'
 ```
