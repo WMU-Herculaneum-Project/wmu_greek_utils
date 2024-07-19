@@ -130,16 +130,29 @@ def form_to_long_form(form):
     return short_form_to_long_form.get(form.lower(), form.lower())
 
 
-def parse_morphology(morphology):
+def parse_morphology(morphology, include_names=True):
     """
-    Parse the morphology field of a morphological code.
-    >>> parse_morphology("v3sasm---")
+    Parse the morphology field of a morphological code. If include_names is True,
+    return a zip of tuples with the position name and the value.
+    If include_names is False, return a list of values.
+    >>> list(parse_morphology("n-s---mn-"))
+    [('part_of_speech', 'noun'), ('person', None), ('number', 'singular'), ('tense', None), ('mood', None), ('voice', None), ('gender', 'masculine'), ('case', 'nominative'), ('degree', None)]
+    >>> parse_morphology("v3sasm---", include_names=False)
     ['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle', None, None, None]
-    >>> parse_morphology("n-s---mn-")
+    >>> parse_morphology("n-s---mn-", include_names=False)
     ['noun', None, 'singular', None, None, None, 'masculine', 'nominative', None]
     """
     if len(morphology) != 9:
         raise ValueError("Morphology must be 9 characters long.")
+    if include_names:
+        return zip(
+            position_names(),
+            (
+                name_mapping[k].get(v, None)
+                for k, v in enumerate(morphology.strip().lower())
+            ),
+        )
+
     return [
         name_mapping[k].get(v, None) for k, v in enumerate(morphology.strip().lower())
     ]
@@ -208,6 +221,16 @@ position_name_map = {
     "gen": "gender",
     "deg": "degree",
 }
+
+
+@lru_cache(maxsize=128)
+def position_names():
+    """
+    Return the names of the positions.
+    >>> position_names()
+    ['part_of_speech', 'person', 'number', 'tense', 'mood', 'voice', 'gender', 'case', 'degree']
+    """
+    return list(position_map.values())
 
 
 def short_form_to_position_name(short_form):

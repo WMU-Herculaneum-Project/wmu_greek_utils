@@ -506,7 +506,7 @@ test_cases = [
 
 @pytest.mark.parametrize("morphology", test_cases)
 def test_parse_morphology(morphology):
-    assert agdt.parse_morphology(morphology) == [
+    assert agdt.parse_morphology(morphology, include_names=False) == [
         agdt.name_mapping[k].get(v, None) for k, v in enumerate(morphology.lower())
     ]
 

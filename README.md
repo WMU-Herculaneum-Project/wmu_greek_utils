@@ -23,15 +23,22 @@ Examples:
 1. Parsing a verb morphology code:
 
 ```python
->>> parse_morphology("v3sasm---")
+>>> parse_morphology("v3sasm---", include_names=False)
 ['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle', None, None, None]
 ```
 
 2. Parsing a noun morphology code:
 
 ```python
->>> parse_morphology("n-s---mn-")
+>>> parse_morphology("n-s---mn-", include_names=False)
 ['noun', None, 'singular', None, None, None, 'masculine', 'nominative', None]
+```
+
+3. Including the position names in the output:
+
+```python
+   >>> list(parse_morphology("n-s---mn-"))
+    [('part_of_speech', 'noun'), ('person', None), ('number', 'singular'), ('tense', None), ('mood', None), ('voice', None), ('gender', 'masculine'), ('case', 'nominative'), ('degree', None)]
 ```
 
 #### morphology_string
