@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 name_mapping = {
     0: {
         "n": "noun",
@@ -143,6 +145,7 @@ def parse_morphology(morphology):
     ]
 
 
+@lru_cache(maxsize=128)
 def produce_morphology(form):
     """
     Produce the morphology field of a grammatical form.
@@ -181,6 +184,68 @@ def morphology_string(forms):
             position, value = result
             morphology[position] = value
     return "".join(morphology)
+
+
+position_map = {
+    1: "part_of_speech",
+    2: "person",
+    3: "number",
+    4: "tense",
+    5: "mood",
+    6: "voice",
+    7: "gender",
+    8: "case",
+    9: "degree",
+}
+
+position_name_map = {
+    "pos": "part_of_speech",
+    "part of speech": "part_of_speech",
+    "per": "person",
+    "pers": "person",
+    "num": "number",
+    "ten": "tense",
+    "gen": "gender",
+    "deg": "degree",
+}
+
+
+def short_form_to_position_name(short_form):
+    """
+    Given a short form, like 'pos', return the long form, like 'part of speech'.
+    Return the short form if the long form is not found.
+    Utility function.
+    """
+    return position_name_map.get(short_form.lower(), short_form.lower())
+
+
+def position_to_name(position):
+    """
+    Given a 0-based position, return the name of the position.
+    >>> position_to_name(0)
+    'part_of_speech'
+    >>> position_to_name(8)
+    'degree'
+    """
+    return position_map.get(position + 1, None)
+
+
+@lru_cache(maxsize=128)
+def name_to_position(name):
+    """
+    Given a name, return the 0-based position.
+    >>> name_to_position('part_of_speech')
+    0
+    >>> name_to_position('pos')
+    0
+    >>> name_to_position('degree')
+    8
+    """
+    form = short_form_to_position_name(name)
+    for k, v in position_map.items():
+        if v == form:
+            return k - 1
+    return None
 
 
 if __name__ == "__main__":

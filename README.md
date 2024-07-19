@@ -76,3 +76,27 @@ Examples:
 >>> morphology_string(['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle'])
 'v3sasm---'
 ```
+
+#### position_to_name
+
+"""
+Given a 0-based position, return the name of the position.
+
+```python >>> position_to_name(0)
+'part_of_speech' >>> position_to_name(8)
+'degree'
+```
+
+#### name_to_position
+
+Given a name, return the 0-based position. Can use some short
+or alternate names for the name.
+
+```python
+    >>> name_to_position('part_of_speech')
+    0
+    >>> name_to_position('pos')
+    0
+    >>> name_to_position('degree')
+    8
+```

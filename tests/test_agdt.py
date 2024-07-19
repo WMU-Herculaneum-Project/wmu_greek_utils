@@ -536,3 +536,35 @@ def test_morphology_string():
 
 def test_morphology_string_with_short_forms():
     assert agdt.morphology_string(["n", "MASC", "sing", "NOM"]) == "n-s---mn-"
+
+
+position_cases = [
+    [1, "part of speech"],
+    [2, "person"],
+    [3, "number"],
+    [4, "tense"],
+    [5, "mood"],
+    [6, "voice"],
+    [7, "gender"],
+    [8, "case"],
+    [9, "degree"],
+    [1, "pos"],
+    [1, "part_of_speech"],
+    [2, "per"],
+    [2, "pers"],
+    [3, "num"],
+    [4, "ten"],
+    [7, "gen"],
+    [9, "deg"],
+]
+
+
+@pytest.mark.parametrize("position,name", position_cases)
+def test_position_map(position, name):
+    assert agdt.position_to_name(position - 1) == agdt.short_form_to_position_name(name)
+    assert agdt.name_to_position(name) == position - 1
+
+
+def test_assert_position_to_name_not_found():
+    assert not agdt.name_to_position("not found")
+    assert not agdt.position_to_name(10)
