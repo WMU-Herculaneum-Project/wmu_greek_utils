@@ -1,4 +1,4 @@
-morphological_mapping = {
+name_mapping = {
     0: {
         "n": "noun",
         "v": "verb",
@@ -55,64 +55,67 @@ morphological_mapping = {
 }
 
 short_form_to_long_form = {
-    "n": "noun",
-    "v": "verb",
-    "a": "adjective",
-    "adj": "adjective",
-    "d": "adverb",
-    "adv": "adverb",
-    "l": "article",
-    "art": "article",
-    "g": "particle",
-    "c": "conjunction",
-    "conj": "conjunction",
-    "r": "preposition",
-    "prep": "preposition",
-    "pro": "pronoun",
-    "pron": "pronoun",
-    "m": "numeral",
-    "num": "numeral",
-    "i": "interjection",
-    "intj": "interjection",
-    "u": "punctuation",
-    "punct": "punctuation",
-    "x": "not available",
-    "na": "not available",
     "1p": "first person",
     "2p": "second person",
     "3p": "third person",
-    "sg": "singular",
-    "sing": "singular",
-    "s": "singular",
-    "pl": "plural",
-    "pres": "present",
-    "impf": "imperfect",
-    "perf": "perfect",
-    "plup": "pluperfect",
-    "futperf": "future perfect",
-    "fut": "future",
-    "aor": "aorist",
-    "ind": "indicative",
-    "subj": "subjunctive",
-    "opt": "optative",
-    "inf": "infinitive",
-    "imp": "imperative",
-    "part": "participle",
+    "a": "adjective",
+    "acc": "accusative",
     "act": "active",
+    "adj": "adjective",
+    "adv": "adverb",
+    "aor": "aorist",
+    "art": "article",
+    "c": "conjunction",
+    "comp": "comparative",
+    "conj": "conjunction",
+    "d": "adverb",
+    "dat": "dative",
+    "fem": "feminine",
+    "fut": "future",
+    "futperf": "future perfect",
+    "g": "particle",
+    "gen": "genitive",
+    "i": "interjection",
+    "imp": "imperative",
+    "impf": "imperfect",
+    "ind": "indicative",
+    "inf": "infinitive",
+    "intj": "interjection",
+    "l": "article",
+    "loc": "locative",
+    "m": "numeral",
+    "masc": "masculine",
+    "mediopassive": "medio-passive",
     "mid": "middle",
     "mp": "medio-passive",
-    "masc": "masculine",
-    "fem": "feminine",
-    "neut": "neuter",
+    "n": "noun",
+    "na": "not available",
     "neu": "neuter",
+    "neut": "neuter",
     "nom": "nominative",
-    "gen": "genitive",
-    "dat": "dative",
-    "acc": "accusative",
-    "voc": "vocative",
-    "loc": "locative",
-    "comp": "comparative",
+    "num": "numeral",
+    "opt": "optative",
+    "part": "participle",
+    "pas": "passive",
+    "pass": "passive",
+    "perf": "perfect",
+    "pl": "plural",
+    "plup": "pluperfect",
+    "prep": "preposition",
+    "pres": "present",
+    "pro": "pronoun",
+    "pron": "pronoun",
+    "punct": "punctuation",
+    "r": "preposition",
+    "s": "singular",
+    "sg": "singular",
+    "sing": "singular",
+    "subj": "subjunctive",
     "super": "superlative",
+    "u": "punctuation",
+    "v": "verb",
+    "voc": "vocative",
+    "x": "not available",
 }
 
 
@@ -120,40 +123,67 @@ def form_to_long_form(form):
     """
     Given a short form, like 'v', return the long form, like 'verb'.
     Return the short form if the long form is not found.
+    Utility function.
     """
-    return short_form_to_long_form.get(form, form)
+    return short_form_to_long_form.get(form.lower(), form.lower())
 
 
 def parse_morphology(morphology):
     """
     Parse the morphology field of a morphological code.
+    >>> parse_morphology("v3sasm---")
+    ['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle', None, None, None]
+    >>> parse_morphology("n-s---mn-")
+    ['noun', None, 'singular', None, None, None, 'masculine', 'nominative', None]
     """
-    return [morphological_mapping[k].get(v, None) for k, v in enumerate(morphology)]
+    if len(morphology) != 9:
+        raise ValueError("Morphology must be 9 characters long.")
+    return [
+        name_mapping[k].get(v, None) for k, v in enumerate(morphology.strip().lower())
+    ]
 
 
 def produce_morphology(form):
     """
     Produce the morphology field of a grammatical form.
     From a form, like 'vocative', produce the position and short text, for example (7, 'v').
+    Utility function.
     """
-    for k, v in morphological_mapping.items():
+    lowered_form = form.lower()
+    for k, v in name_mapping.items():
         for key, value in v.items():
-            if value == form:
+            if value == lowered_form:
                 return (k, key)
     return None
 
 
-def produce_morphology_string(forms):
+def morphology_string(forms):
     """
     Given a list of forms, produce the morphology string to the best
     of our ability.
-    For example, given ['noun', 'masculine', 'singular', 'nominative'],
-    return 'n-s---mn-'.
+    >>> morphology_string(['noun', 'masculine', 'singular', 'nominative'])
+    'n-s---mn-'
+    >>> morphology_string(sorted(['noun', 'masculine', 'singular', 'nominative']))
+    'n-s---mn-'
+    >>> morphology_string(['masc', 'sing', 'nom', 'n'])
+    'n-s---mn-'
+    >>> morphology_string(['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle', None, None, None])
+    'v3sasm---'
+    >>> morphology_string(['verb', 'third person', 'singular', 'aorist', 'subjunctive', 'middle'])
+    'v3sasm---'
     """
     morphology = ["-"] * 9
     for form in forms:
+        if not form:
+            continue
         result = produce_morphology(form_to_long_form(form))
         if result:
             position, value = result
             morphology[position] = value
     return "".join(morphology)
+
+
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()

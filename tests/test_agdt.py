@@ -1,6 +1,7 @@
 from wmu_greek_utils import agdt
 import pytest
 
+
 test_cases = [
     "a-d---ma-",
     "a-d---mac",
@@ -499,14 +500,22 @@ test_cases = [
     "v3srma---",
     "v3srsa---",
     "z--------",
+    "V3SRSA---",
 ]
 
 
 @pytest.mark.parametrize("morphology", test_cases)
 def test_parse_morphology(morphology):
     assert agdt.parse_morphology(morphology) == [
-        agdt.morphological_mapping[k].get(v, None) for k, v in enumerate(morphology)
+        agdt.name_mapping[k].get(v, None) for k, v in enumerate(morphology.lower())
     ]
+
+
+def test_morphology_length():
+    with pytest.raises(ValueError):
+        agdt.parse_morphology("a-d---ma")
+    with pytest.raises(ValueError):
+        agdt.parse_morphology("nms")
 
 
 def test_produce_morphology():
@@ -518,12 +527,12 @@ def test_produce_morphology():
     assert agdt.produce_morphology("comparative") == (8, "c")
 
 
-def test_produce_morphology_string():
+def test_morphology_string():
     assert (
-        agdt.produce_morphology_string(["noun", "masculine", "singular", "nominative"])
+        agdt.morphology_string(["noun", "masculine", "singular", "nominative"])
         == "n-s---mn-"
     )
 
 
-def test_produce_morphology_string_with_short_forms():
-    assert agdt.produce_morphology_string(["n", "masc", "sing", "nom"]) == "n-s---mn-"
+def test_morphology_string_with_short_forms():
+    assert agdt.morphology_string(["n", "MASC", "sing", "NOM"]) == "n-s---mn-"
