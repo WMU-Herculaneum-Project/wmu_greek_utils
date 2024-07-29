@@ -107,3 +107,45 @@ or alternate names for the name.
     >>> name_to_position('degree')
     8
 ```
+
+### recreate_sentence
+
+Given a list of words and a list of morphologies, recreate the sentence,
+along with the positions in the sentence.
+
+```python
+words = [
+        ("The", "det"),
+        ("cat", "noun"),
+        (",", "punctuation"),
+        ("the", "det"),
+        ("dog", "noun"),
+        (",", "punctuation"),
+        ("and", "conj"),
+        ("the", "det"),
+        ("frog", "noun"),
+        ("sat", "verb"),
+        ("on", "prep"),
+        ("the", "det"),
+        ("mat", "noun"),
+        (".", "punctuation"),
+    ]
+sentence, poss = agdt.recreate_sentence(words)
+assert sentence == "The cat, the dog, and the frog sat on the mat."
+assert poss == [
+        (0, 2),
+        (4, 6),
+        (7, 7),
+        (9, 11),
+        (13, 15),
+        (16, 16),
+        (18, 20),
+        (22, 24),
+        (26, 29),
+        (31, 33),
+        (35, 36),
+        (38, 40),
+        (42, 44),
+        (45, 45),
+    ]
+```

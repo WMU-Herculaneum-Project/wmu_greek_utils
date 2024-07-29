@@ -568,3 +568,59 @@ def test_position_map(position, name):
 def test_assert_position_to_name_not_found():
     assert not agdt.name_to_position("not found")
     assert not agdt.position_to_name(10)
+
+
+def test_recreate_sentence_empty():
+    assert agdt.recreate_sentence([]) == ("", [])
+
+
+def test_recreate_sentence_1():
+    words = [
+        ("The", "det"),
+        ("cat", "noun"),
+        ("sat", "verb"),
+        ("on", "prep"),
+        ("the", "det"),
+        ("mat", "noun"),
+        (".", "punctuation"),
+    ]
+    sentence, poss = agdt.recreate_sentence(words)
+    assert sentence == "The cat sat on the mat."
+    assert poss == [(0, 2), (4, 6), (8, 10), (12, 13), (15, 17), (19, 21), (22, 22)]
+
+
+def test_recreate_sentence_internal_punct():
+    words = [
+        ("The", "det"),
+        ("cat", "noun"),
+        (",", "punctuation"),
+        ("the", "det"),
+        ("dog", "noun"),
+        (",", "punctuation"),
+        ("and", "conj"),
+        ("the", "det"),
+        ("frog", "noun"),
+        ("sat", "verb"),
+        ("on", "prep"),
+        ("the", "det"),
+        ("mat", "noun"),
+        (".", "punctuation"),
+    ]
+    sentence, poss = agdt.recreate_sentence(words)
+    assert sentence == "The cat, the dog, and the frog sat on the mat."
+    assert poss == [
+        (0, 2),
+        (4, 6),
+        (7, 7),
+        (9, 11),
+        (13, 15),
+        (16, 16),
+        (18, 20),
+        (22, 24),
+        (26, 29),
+        (31, 33),
+        (35, 36),
+        (38, 40),
+        (42, 44),
+        (45, 45),
+    ]

@@ -271,6 +271,58 @@ def name_to_position(name):
     return None
 
 
+def ngrams(tokens, n):
+    """
+    Given a list of tokens, return the ngrams.
+    >>> ngrams(['The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog', '.'], 2)
+    [('The', 'quick'), ('quick', 'brown'), ('brown', 'fox'), ('fox', 'jumps'), ('jumps', 'over'), ('over', 'the'), ('the', 'lazy'), ('lazy', 'dog'), ('dog', '.')]
+    >>> ngrams(['The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog', '.'], 3)
+    [('The', 'quick', 'brown'), ('quick', 'brown', 'fox'), ('brown', 'fox', 'jumps'), ('fox', 'jumps', 'over'), ('jumps', 'over', 'the'), ('over', 'the', 'lazy'), ('the', 'lazy', 'dog'), ('lazy', 'dog', '.')]
+    """
+    return list(zip(*[tokens[i:] for i in range(n)]))
+
+
+def recreate_sentence(words):
+    """
+    Given a list of words with their POS, recreate the sentence.
+    and give start and end position markers for each word.
+    If the POS is 'punctuation' don't add a space, otherwise add a space.
+    Note that we have to peek ahead to see if the next word is punctuation.
+    >>> recreate_sentence([("The", "det"),("cat", "noun"),("sat", "verb"),("on", "prep"),("the", "det"),("mat", "noun"),(".", "punctuation"),])
+    ('The cat sat on the mat.', [(0, 2), (4, 6), (8, 10), (12, 13), (15, 17), (19, 21), (22, 22)])
+    >>> recreate_sentence([("The", "det"),("cat", "noun"),(",", "punctuation"), ("the", "det"),("dog", "noun"), (",", "punctuation"), ("and", "conj"), ("the", "det"),("frog", "noun"),("sat", "verb"),("on", "prep"),("the", "det"),("mat", "noun"),(".", "punctuation"),])
+    ('The cat, the dog, and the frog sat on the mat.', [(0, 2), (4, 6), (7, 7), (9, 11), (13, 15), (16, 16), (18, 20), (22, 24), (26, 29), (31, 33), (35, 36), (38, 40), (42, 44), (45, 45)])
+    """
+    if not words:
+        return ("", [])
+    sentence = []
+    positions = []
+    last_end = -1
+    for words in ngrams(words, 2):
+        word, _ = words[0]
+        _, next_pos = words[1]
+        sentence.append(word)
+        start = last_end + 1
+        end = start + len(word) - 1
+        positions.append((start, end))
+        if next_pos != "punctuation":
+            sentence.append(" ")
+            last_end = end + 1
+        else:
+            last_end = end
+    # Add the last token
+    last_word = words[-1][0]
+    sentence.append(last_word)
+    if len(words) > 1:
+        last_end = positions[-1][1]
+        start = last_end + 1
+        end = start + len(last_word) - 1
+        positions.append((start, end))
+    else:
+        positions.append((0, len(last_word) - 1))
+    return ("".join(sentence).strip(), positions)
+
+
 if __name__ == "__main__":
     import doctest
 
