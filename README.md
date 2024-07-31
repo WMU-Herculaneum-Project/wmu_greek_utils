@@ -12,6 +12,58 @@ poetry add wmu_greek_utils
 
 ## Usage
 
+## Normalization Options
+
+The `Normalizer` class provides several options for normalizing Greek text. These options can be combined to achieve the desired normalization effect. Below are the available options:
+
+- `LOWERCASE`: Converts all characters to lowercase.
+- `UPPERCASE`: Converts all characters to uppercase.
+- `REMOVE_SPACES`: Removes all spaces from the text.
+- `REMOVE_NEWLINES`: Removes all newline characters from the text.
+- `REMOVE_PUNCTUATION`: Removes all punctuation marks from the text.
+- `REMOVE_ACCENTS`: Removes all accent marks from the text.
+- `REMOVE_BREATHING`: Removes all breathing marks from the text.
+- `IOTA_ADSCRIPT`: Converts iota subscript to iota adscript.
+- `NORMALIZE_SIGMA`: Normalizes all sigma characters to a single form.
+- `NORMALIZE_THETA`: Normalizes all theta characters to a single form.
+- `NORMALIZE_PHI`: Normalizes all phi characters to a single form.
+- `NORMALIZE_APOSTROPHE`: Normalizes all apostrophe characters to a single form.
+
+### Example Usage
+
+```python
+from normalize import Normalizer, NormalizationOptions
+
+# Standard normalization is LOWERCASE | NORMALIZE_THETA | NORMALIZE_PHI | NORMALIZE_APOSTROPHE
+normalize = Normalizer()
+# notice odd thetas
+text = "Ἐν ἀρχῇ ἦν ὁ Λόγος, καὶ ὁ Λόγος ἦν πρὸς τὸν ϑεόν, καὶ ϑεὸς ἦν ὁ Λόγος."
+normalized_text = normalize(text)
+print(normalized_text)  # Output: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος."
+
+# Create a normalizer with multiple options
+
+from normalize import UPPERCASE, REMOVE_SPACES, REMOVE_NEWLINES, REMOVE_PUNCTUATION, REMOVE_ACCENTS, REMOVE_BREATHING, IOTA_ADSCRIPT, NORMALIZE_SIGMA, NORMALIZE_THETA, NORMALIZE_PHI, NORMALIZE_APOSTROPHE
+
+radical_normalizer = Normalizer(config=UPPERCASE
+        | REMOVE_SPACES
+        | REMOVE_NEWLINES
+        | REMOVE_PUNCTUATION
+        | REMOVE_ACCENTS
+        | REMOVE_BREATHING
+        | IOTA_ADSCRIPT
+        | NORMALIZE_SIGMA
+        | NORMALIZE_THETA
+        | NORMALIZE_PHI
+        | NORMALIZE_APOSTROPHE
+)
+
+# The above is equivalent to Normalizer(config=NORMALIZATION_OPTIONS.ALL)
+
+normalized_text = radical_normalizer(text)
+print(normalized_text)  # Output: "ΕΝΑΡΧΗΙΗΝΟΛΟΓΟϹΚΑΙΟΛΟΓΟϹΗΝΠΡΟϹΤΟΝΘΕΟΝΚΑΙΘΕΟϹΗΝΟΛΟΓΟϹ"
+```
+
 ### AGDT morphological parsing
 
 #### parse_mophology
