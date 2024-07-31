@@ -201,3 +201,9 @@ assert poss == [
         (45, 45),
     ]
 ```
+
+# Acknowledgements
+
+This package was developed by the WMU Herculaneum Project.
+
+I am grateful for James Tauber's greek_normalisation package, which was used as a reference for the normalization options in this package; some of that package is used.
