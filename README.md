@@ -32,7 +32,7 @@ The `Normalizer` class provides several options for normalizing Greek text. Thes
 ### Example Usage
 
 ```python
-from normalize import Normalizer, NormalizationOptions
+from wmu_greek_utils.normalize import Normalizer, NormalizationOptions
 
 # Standard normalization is LOWERCASE | NORMALIZE_THETA | NORMALIZE_PHI | NORMALIZE_APOSTROPHE
 normalize = Normalizer()
