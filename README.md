@@ -7,7 +7,15 @@ This package provides a set of utilities for working with Greek text. It is desi
 ## Installation
 
 ```bash
-poetry add wmu_greek_utils
+uv add wmu_greek_utils
+```
+
+## Development
+
+```bash
+uv sync --group dev
+uv run black --check .
+uv run pytest -v
 ```
 
 ## Usage
