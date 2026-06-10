@@ -1,6 +1,6 @@
-[![Python package](https://github.com/WMU-Herculaneum-Project/wmu_greek_utils/actions/workflows/test.yml/badge.svg)](https://github.com/WMU-Herculaneum-Project/wmu_greek_utils/actions)
+[![Python package](https://github.com/WMU-Herculaneum-Project/wmu_greek_utils/actions/workflows/test.yml/badge.svg)](https://github.com/WMU-Herculaneum-Project/wmu_greek_utils/actions/workflows/test.yml)
 
-# Greek Language Utilties from the WMU Hecurlaneum Project.
+# Greek Language Utilities from the WMU Herculaneum Project.
 
 This package provides a set of utilities for working with Greek text. It is designed to be used in conjunction with the WMU Herculaneum Project, but can be used independently.
 
@@ -44,7 +44,7 @@ from wmu_greek_utils.normalize import Normalizer, NormalizationOptions
 
 # Standard normalization is LOWERCASE | NORMALIZE_THETA | NORMALIZE_PHI | NORMALIZE_APOSTROPHE
 normalize = Normalizer()
-# notice odd thetas
+# Note the odd theta characters.
 text = "Ἐν ἀρχῇ ἦν ὁ Λόγος, καὶ ὁ Λόγος ἦν πρὸς τὸν ϑεόν, καὶ ϑεὸς ἦν ὁ Λόγος."
 normalized_text = normalize(text)
 print(normalized_text)  # Output: "ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος."
@@ -66,7 +66,7 @@ radical_normalizer = Normalizer(config=UPPERCASE
         | NORMALIZE_APOSTROPHE
 )
 
-# The above is equivalent to Normalizer(config=NORMALIZATION_OPTIONS.ALL)
+# The above is equivalent to Normalizer(config=NormalizationOptions.ALL)
 
 normalized_text = radical_normalizer(text)
 print(normalized_text)  # Output: "ΕΝΑΡΧΗΙΗΝΟΛΟΓΟϹΚΑΙΟΛΟΓΟϹΗΝΠΡΟϹΤΟΝΘΕΟΝΚΑΙΘΕΟϹΗΝΟΛΟΓΟϹ"
@@ -74,7 +74,7 @@ print(normalized_text)  # Output: "ΕΝΑΡΧΗΙΗΝΟΛΟΓΟϹΚΑΙΟΛΟΓ�
 
 ### AGDT morphological parsing
 
-#### parse_mophology
+#### parse_morphology
 
 The `parse_morphology` function can be used to parse the morphology field of a morphological code.
 
