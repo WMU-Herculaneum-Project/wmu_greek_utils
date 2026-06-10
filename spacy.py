@@ -1,0 +1,17 @@
+name_mapping = {
+    "Aspect": "mood",
+    "Case": "case",
+    "Definite": None,
+    "Degree": "degree",
+    "Gender": "gender",
+    "Mood": "mood",
+    "Number": "number",
+    "Person": "person",
+    "Polarity": None,
+    "Poss": None,
+    "PronType": None,
+    "Reflex": None,
+    "Tense": "tense",
+    "VerbForm": None,
+    "Voice": "voice",
+}

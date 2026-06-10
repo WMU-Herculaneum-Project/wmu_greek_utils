@@ -10,6 +10,8 @@ python = ">=3.8.1"
 python-dotenv = "^1.0.1"
 greek-normalisation = "^0.5.1"
 regex = "^2024.7.24"
+mycapytain = "^3.0.2"
+lxml = "^5.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
