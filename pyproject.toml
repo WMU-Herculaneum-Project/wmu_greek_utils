@@ -8,11 +8,8 @@ authors = [
   { name = "Will Fitzgerald", email = "willf@users.noreply.github.com" },
 ]
 dependencies = [
-  "python-dotenv>=1.0.1,<2.0.0",
   "greek-normalisation>=0.5.1,<0.6.0",
   "regex>=2024.7.24,<2025.0.0",
-  "mycapytain>=3.0.2,<4.0.0",
-  "lxml>=5.3.0,<6.0.0",
 ]
 
 [dependency-groups]
